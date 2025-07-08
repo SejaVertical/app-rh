@@ -49,11 +49,11 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
         ? new Date(colaborador.data_nascimento).toISOString().split("T")[0]
         : "";
 
-      // Formatar valores numéricos para string no formato '6000,00' (sem R$)
+      // Formatar valores numéricos para string no formato '9.900,20' (sem R$)
       const formatarParaInput = (valor) => {
         if (valor === null || valor === undefined || valor === "") return "";
         if (typeof valor === "number" && !isNaN(valor)) {
-          return valor.toFixed(2).replace(".", ",");
+          return valor.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
         if (typeof valor === "string") {
           // Se já estiver no formato correto, retorna
@@ -63,12 +63,17 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
           ) {
             return valor;
           }
-          // Se for string numérica simples, converte
-          const num = parseFloat(
-            valor.replace(/[^0-9,]/g, "").replace(",", "."),
-          );
+          // Corrigir: aceitar ponto ou vírgula como separador decimal
+          let num = NaN;
+          if (/^\d+[\.,]\d{1,}$/.test(valor)) {
+            // Se tem ponto ou vírgula como separador decimal
+            num = parseFloat(valor.replace(",", "."));
+          } else {
+            // Se for string numérica simples
+            num = parseFloat(valor);
+          }
           if (!isNaN(num)) {
-            return num.toFixed(2).replace(".", ",");
+            return num.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           }
         }
         return "";

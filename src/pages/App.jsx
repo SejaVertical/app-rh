@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Sidebar from "../components/Sidebar";
 import ColaboradoresPorDepartamentoChart from "../components/ColaboradoresPorDepartamentoChart";
 import FeriadosList from "../components/FeriadosList";

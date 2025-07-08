@@ -11,7 +11,7 @@ const FeriadosList = () => {
     setError(null);
     try {
       const response = await fetch(
-        //`https://feriados-brasileiros1.p.rapidapi.com/read?cidade=goiania&estado=GO&ano=${ano}`,
+        `https://feriados-brasileiros1.p.rapidapi.com/read?cidade=goiania&estado=GO&ano=${ano}`,
         {
           headers: {
             "x-rapidapi-host": "feriados-brasileiros1.p.rapidapi.com",
@@ -87,7 +87,7 @@ const FeriadosList = () => {
           <p>{error}</p>
         </div>
       ) : (
-        <div className="h-[calc(100%-60px)] overflow-y-auto">
+        <div className="overflow-y-auto max-h-64">
           {feriadosParaExibir.length === 0 ? (
             <p className="text-center text-gray-500">
               Nenhum feriado encontrado
