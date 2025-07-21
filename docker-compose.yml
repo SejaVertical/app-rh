@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app-rh:
+    image: adminvertical/app-rh:latest
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.app-rh.rule=Host(`rh.sejavertical.com.br`)"
+        - "traefik.http.routers.app-rh.entrypoints=web"
+        - "traefik.http.services.app-rh.loadbalancer.server.port=80"
+    networks:
+      - minha_rede_publica
+    restart: unless-stopped
+
+networks:
+  minha_rede_publica:
+    external: true 
