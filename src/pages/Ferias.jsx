@@ -6,6 +6,7 @@ import ViewButton from "../components/ViewButton";
 import { AgendarFeriasModal } from "../components/AgendarFeriasModal";
 import { HistoricoFeriasModal } from "../components/HistoricoFeriasModal";
 import ExportCSV from "../components/ExportCSV";
+import { CollectiveFeriasModal } from "../components/CollectiveFeriasModal";
 
 export const Ferias = () => {
   const [aba, setAba] = useState("ativos");
@@ -17,6 +18,7 @@ export const Ferias = () => {
   const [modalAgendarOpen, setModalAgendarOpen] = useState(false);
   const [modalHistoricoOpen, setModalHistoricoOpen] = useState(false);
   const [colaboradorSelecionado, setColaboradorSelecionado] = useState(null);
+  const [modalColetivoOpen, setModalColetivoOpen] = useState(false);
 
   // Função para calcular anos de empresa
   const calcularAnosEmpresa = (dataInicio) => {
@@ -197,6 +199,8 @@ export const Ferias = () => {
             <h1 className="mb-6 ml-10 text-2xl font-bold text-[var(--vertical-color)]">
               Descanso Remunerado
             </h1>
+            {/* Botão para férias coletivas */}
+
             {/* Filtros, abas e ações em uma única div flex */}
             <div className="mb-4 flex flex-wrap items-center justify-center-safe gap-4">
               {/* Abas */}
@@ -256,6 +260,26 @@ export const Ferias = () => {
               </select>
               {/* Botões */}
               <ExportCSV />
+              <button
+                className="flex cursor-pointer items-center gap-2 rounded bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-orange-600"
+                onClick={() => setModalColetivoOpen(true)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V4m0 0a9 9 0 100 16V4z"
+                  />
+                </svg>
+                Agendar Férias Coletivas
+              </button>
             </div>
 
             {/* Tabela responsiva para telas médias e grandes */}
@@ -453,6 +477,15 @@ export const Ferias = () => {
           </div>
         </main>
       </div>
+      <CollectiveFeriasModal
+        isOpen={modalColetivoOpen}
+        onClose={() => setModalColetivoOpen(false)}
+        colaboradores={colaboradores}
+        onSuccess={() => {
+          // Recarregue os colaboradores após agendamento coletivo
+          window.location.reload();
+        }}
+      />
       {colaboradorSelecionado && (
         <>
           <AgendarFeriasModal

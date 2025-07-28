@@ -522,9 +522,16 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[var(--vertical-color)] focus:ring-1 focus:ring-[var(--vertical-color)] focus:outline-none"
               >
                 <option value="">Selecione o cargo do colaborador</option>
-                <option value="Analista">Analista</option>
-                <option value="Assistente">Assistente</option>
-                <option value="Coordenador">Coordenador</option>
+                <option value="Assistente">Assistente 1</option>
+                <option value="Assistente">Assistente 2</option>
+                <option value="Analista">Analista 1</option>
+                <option value="Analista">Analista 2</option>
+                <option value="Analista">Analista 3</option>
+                <option value="Analista">Supervisor 1</option>
+                <option value="Analista">Supervisor 2</option>
+                <option value="Coordenador">Coordenador 1</option>
+                <option value="Coordenador">Coordenador 2</option>
+                <option value="Coordenador">Coordenador 3</option>
                 <option value="Gerente">Gerente</option>
                 <option value="Diretor">Diretor</option>
                 <option value="Engenheiro">Engenheiro</option>
