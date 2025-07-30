@@ -7,7 +7,10 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.app-rh.rule=Host(`rh.sejavertical.com.br`)"
-        - "traefik.http.routers.app-rh.entrypoints=web"
+        - "traefik.http.routers.app-rh.entrypoints=web,websecure"
+        - "traefik.http.routers.app-rh.tls=true"
+        - "traefik.http.routers.app-rh.middlewares=redirect-to-https"
+        - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
         - "traefik.http.services.app-rh.loadbalancer.server.port=80"
     networks:
       - minha_rede_publica
