@@ -278,7 +278,7 @@ export const Ferias = () => {
                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V4m0 0a9 9 0 100 16V4z"
                   />
                 </svg>
-                Agendar Férias Coletivas
+                Agendar Descanso Coletivo
               </button>
             </div>
 
