@@ -522,21 +522,24 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[var(--vertical-color)] focus:ring-1 focus:ring-[var(--vertical-color)] focus:outline-none"
               >
                 <option value="">Selecione o cargo do colaborador</option>
-                <option value="Assistente">Assistente 1</option>
-                <option value="Assistente">Assistente 2</option>
-                <option value="Analista">Analista 1</option>
-                <option value="Analista">Analista 2</option>
-                <option value="Analista">Analista 3</option>
-                <option value="Analista">Supervisor 1</option>
-                <option value="Analista">Supervisor 2</option>
-                <option value="Coordenador">Coordenador 1</option>
-                <option value="Coordenador">Coordenador 2</option>
-                <option value="Coordenador">Coordenador 3</option>
-                <option value="Gerente">Gerente</option>
-                <option value="Diretor">Diretor</option>
-                <option value="Engenheiro">Engenheiro</option>
                 <option value="Estagiário">Estagiário</option>
+                <option value="Assistente 1">Assistente 1</option>
+                <option value="Assistente 2">Assistente 2</option>
+                <option value="Analista 1">Analista 1</option>
+                <option value="Analista 2">Analista 2</option>
+                <option value="Analista 3">Analista 3</option>
+                <option value="Supervisor 1">Supervisor 1</option>
+                <option value="Supervisor 2">Supervisor 2</option>
+                <option value="Coordenador 1">Coordenador 1</option>
+                <option value="Coordenador 2">Coordenador 2</option>
+                <option value="Coordenador 3">Coordenador 3</option>
+                <option value="Gerente">Gerente</option>
+                <option value="Engenheiro">Engenheiro</option>
+                <option value="Técnico de Segurança do Trabalho">Técnico de Segurança do Trabalho</option>
+                <option value="Administrativo de Obras">Administrativo de Obras</option>
+                <option value="Mestre de Obras">Mestre de Obras</option>
                 <option value="Serviços Gerais">Serviços Gerais</option>
+                <option value="Diretor">Diretor</option>
               </select>
             </div>
 
