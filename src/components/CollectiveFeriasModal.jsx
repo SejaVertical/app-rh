@@ -31,9 +31,25 @@ export const CollectiveFeriasModal = ({
       return;
     }
 
+    // Filtra colaboradores elegíveis
+    const inicioDate = new Date(inicio);
+    const colaboradoresElegiveis = colaboradores.filter((colab) => {
+      if (!colab.inicio || !colab.ativo) return false;
+      const dataInicioColab = new Date(colab.inicio);
+      return dataInicioColab <= inicioDate;
+    });
+
+    if (colaboradoresElegiveis.length === 0) {
+      setErro(
+        "Nenhum colaborador está elegível para este período de férias coletivas.",
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Atualiza todos os colaboradores
-      const updates = colaboradores.map(async (colab) => {
+      // Atualiza apenas os colaboradores elegíveis
+      const updates = colaboradoresElegiveis.map(async (colab) => {
         const novoUsado = (colab.ferias_tiradas || 0) + dias;
         const novoSaldo = (colab.saldo_ferias || 0) - dias;
 
@@ -51,7 +67,9 @@ export const CollectiveFeriasModal = ({
             saldo_ferias: novoSaldo,
             data_ferias: datasFerias, // Salva como array igual ao individual
           })
-          .eq("id", colab.id);
+          .not("email", "eq", "admin@sejavertical.com.br")
+          .eq("id", colab.id)
+          .eq("ativo", true);
 
         // Opcional: você pode registrar o histórico de férias coletivas em outra tabela
       });
