@@ -53,7 +53,10 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
       const formatarParaInput = (valor) => {
         if (valor === null || valor === undefined || valor === "") return "";
         if (typeof valor === "number" && !isNaN(valor)) {
-          return valor.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          return valor.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
         }
         if (typeof valor === "string") {
           // Se já estiver no formato correto, retorna
@@ -73,7 +76,10 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
             num = parseFloat(valor);
           }
           if (!isNaN(num)) {
-            return num.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return num.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
           }
         }
         return "";
@@ -507,7 +513,7 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
                 <option value="Prazo UDI">Prazo UDI</option>
                 <option value="Prazo">Prazo</option>
                 <option value="RH">RH</option>
-                <option value="RH">Outros</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
 
@@ -535,8 +541,12 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
                 <option value="Coordenador 3">Coordenador 3</option>
                 <option value="Gerente">Gerente</option>
                 <option value="Engenheiro">Engenheiro</option>
-                <option value="Técnico de Segurança do Trabalho">Técnico de Segurança do Trabalho</option>
-                <option value="Administrativo de Obras">Administrativo de Obras</option>
+                <option value="Técnico de Segurança do Trabalho">
+                  Técnico de Segurança do Trabalho
+                </option>
+                <option value="Administrativo de Obras">
+                  Administrativo de Obras
+                </option>
                 <option value="Mestre de Obras">Mestre de Obras</option>
                 <option value="Serviços Gerais">Serviços Gerais</option>
                 <option value="Diretor">Diretor</option>
@@ -730,6 +740,8 @@ const EditModal = ({ isOpen, setModalClose, colaborador }) => {
                 <option value="CLT">CLT</option>
                 <option value="PJ">PJ</option>
                 <option value="Estágio">Estágio</option>
+                <option value="Terceirizado">Terceirizado</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
 

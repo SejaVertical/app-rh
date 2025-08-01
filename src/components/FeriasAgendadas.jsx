@@ -72,7 +72,7 @@ const FeriasAgendadas = () => {
 
   return (
     <div className="rounded-lg border-1 border-[var(--vertical-color)] bg-white p-6 shadow-md">
-      <h2 className="mb-4 text-xl font-semibold text-[var(--vertical-color)]">
+      <h2 className="mb-4 text-lg font-semibold text-[var(--vertical-color)]">
         Descansos Remunerados Agendados{" "}
         <FaUmbrellaBeach className="ml-1 inline text-lg" />
       </h2>

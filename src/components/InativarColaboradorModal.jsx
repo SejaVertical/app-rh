@@ -9,6 +9,7 @@ export const InativarColaboradorModal = ({
 }) => {
   const [dataSaida, setDataSaida] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mensagemRH, setMensagemRH] = useState(" sem observação ");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ export const InativarColaboradorModal = ({
         .update({
           ativo: false,
           saida: dataSaida,
+          observacoes_inativacao: mensagemRH,
         })
         .eq("id", colaborador.id);
 
@@ -50,7 +52,7 @@ export const InativarColaboradorModal = ({
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="mb-2 block text-sm font-medium text-gray-700">
-              Data de Saída
+              Data de Saída:
             </label>
             <input
               type="date"
@@ -58,6 +60,14 @@ export const InativarColaboradorModal = ({
               className="w-full rounded-md border px-3 py-2"
               value={dataSaida}
               onChange={(e) => setDataSaida(e.target.value)}
+            />
+            <label className="mt-2 mb-2 block text-sm font-medium text-gray-700">
+              Observações:
+            </label>
+            <textarea
+              className="h-36 w-full rounded-md border px-3 py-2"
+              value={mensagemRH}
+              onChange={(e) => setMensagemRH(e.target.value)}
             />
           </div>
           <div className="flex justify-end gap-2">

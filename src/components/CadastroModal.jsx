@@ -338,7 +338,7 @@ const CadastroModal = ({ isOpen, setModalClose }) => {
                 <option value="Prazo UDI">Prazo UDI</option>
                 <option value="Prazo">Prazo</option>
                 <option value="RH">RH</option>
-                <option value="RH">Outros</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
 
@@ -366,11 +366,16 @@ const CadastroModal = ({ isOpen, setModalClose }) => {
                 <option value="Coordenador 3">Coordenador 3</option>
                 <option value="Gerente">Gerente</option>
                 <option value="Engenheiro">Engenheiro</option>
-                <option value="Técnico de Segurança do Trabalho">Técnico de Segurança do Trabalho</option>
-                <option value="Administrativo de Obras">Administrativo de Obras</option>
+                <option value="Técnico de Segurança do Trabalho">
+                  Técnico de Segurança do Trabalho
+                </option>
+                <option value="Administrativo de Obras">
+                  Administrativo de Obras
+                </option>
                 <option value="Mestre de Obras">Mestre de Obras</option>
                 <option value="Serviços Gerais">Serviços Gerais</option>
                 <option value="Diretor">Diretor</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
 
@@ -666,6 +671,8 @@ const CadastroModal = ({ isOpen, setModalClose }) => {
                 <option value="CLT">CLT</option>
                 <option value="PJ">PJ</option>
                 <option value="Estágio">Estágio</option>
+                <option value="Terceirizado">Terceirizado</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
 
