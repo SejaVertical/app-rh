@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+:root {
+  --bg-color: #f8f8f8;
+  --vertical-color: #f46c2c;
+  --bg-modal: rgba(0, 0, 0, 0.5);
+}
