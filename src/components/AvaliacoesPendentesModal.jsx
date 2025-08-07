@@ -10,6 +10,8 @@ import {
   FaWindowClose,
   FaExclamationTriangle,
   FaTrash,
+  FaPaperclip,
+  FaEye,
 } from "react-icons/fa";
 
 const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
@@ -25,6 +27,8 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
   const [newDate, setNewDate] = useState(
     new Date().toISOString().split("T")[0],
   );
+  const [newAnexo, setNewAnexo] = useState(null);
+  const [newAnexoPreview, setNewAnexoPreview] = useState(null);
 
   const processAndSortCollaborators = (data) => {
     const sixMonthsAgo = new Date();
@@ -63,7 +67,9 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
     try {
       const { data, error } = await supabase
         .from("users")
-        .select("id, nome, sobrenome, ativo, avaliacoes_desempenho")
+        .select(
+          "id, nome, sobrenome, ativo, avaliacoes_desempenho, avaliacoes_desempenho_anexos",
+        )
         .eq("ativo", true)
         .not("email", "eq", "admin@sejavertical.com.br");
       if (error) throw error;
@@ -87,6 +93,13 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
     onUpdate(); // Refresca o card do dashboard
   };
 
+  const handleAnexoChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setNewAnexo(e.target.files[0]);
+      setNewAnexoPreview(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
   const handleSaveReview = async (collaborator) => {
     if (!newDate) {
       alert("Por favor, selecione uma data.");
@@ -99,10 +112,35 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
     const currentReviews = collaborator.avaliacoes_desempenho || [];
     const newReviews = [...currentReviews, dateToSave];
 
+    // --- Upload do anexo ---
+    let anexoUrl = null;
+    if (newAnexo) {
+      const fileExt = newAnexo.name.split(".").pop();
+      const fileName = `${collaborator.id}-${Date.now()}-${newAnexo.name}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("avaliacoes-desempenho")
+        .upload(fileName, newAnexo);
+      if (uploadError) {
+        alert("Erro ao fazer upload do anexo: " + uploadError.message);
+        setLoadingId(null);
+        return;
+      }
+      anexoUrl = supabase.storage
+        .from("avaliacoes-desempenho")
+        .getPublicUrl(fileName).data.publicUrl;
+    }
+
+    // --- Atualizar anexos ---
+    let currentAnexos = collaborator.avaliacoes_desempenho_anexos || [];
+    let newAnexos = [...currentAnexos, anexoUrl];
+
     try {
       const { error } = await supabase
         .from("users")
-        .update({ avaliacoes_desempenho: newReviews })
+        .update({
+          avaliacoes_desempenho: newReviews,
+          avaliacoes_desempenho_anexos: newAnexos,
+        })
         .eq("id", collaborator.id);
 
       if (error) throw error;
@@ -110,6 +148,8 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
       setSuccessId(collaborator.id);
       handleUpdate();
       setAddingForId(null);
+      setNewAnexo(null);
+      setNewAnexoPreview(null);
       setTimeout(() => setSuccessId(null), 2000);
     } catch (err) {
       console.error("Erro ao adicionar avaliação:", err);
@@ -126,14 +166,43 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
     setLoadingId(collaborator.id);
     setDeletingIndex(dateToDelete);
 
+    // Encontrar o índice da avaliação a ser removida
+    const indexToDelete = collaborator.avaliacoes_desempenho.findIndex(
+      (date) => date === dateToDelete,
+    );
+
+    // Remover a data e o anexo correspondente
     const newReviews = collaborator.avaliacoes_desempenho.filter(
       (date) => date !== dateToDelete,
     );
+    let newAnexos = collaborator.avaliacoes_desempenho_anexos || [];
+    let anexoToDelete = null;
+    if (newAnexos.length > indexToDelete && indexToDelete !== -1) {
+      anexoToDelete = newAnexos[indexToDelete];
+      newAnexos = newAnexos.filter((_, i) => i !== indexToDelete);
+    }
 
     try {
+      // Se houver anexo, remover do bucket
+      if (anexoToDelete) {
+        // Extrair o nome do arquivo da URL
+        const urlParts = anexoToDelete.split("/");
+        const fileName = urlParts[urlParts.length - 1].split("?")[0];
+        const { error: removeError } = await supabase.storage
+          .from("avaliacoes-desempenho")
+          .remove([fileName]);
+        if (removeError) {
+          console.error("Erro ao remover anexo do bucket:", removeError);
+          alert("Erro ao remover anexo do bucket: " + removeError.message);
+        }
+      }
+
       const { error } = await supabase
         .from("users")
-        .update({ avaliacoes_desempenho: newReviews })
+        .update({
+          avaliacoes_desempenho: newReviews,
+          avaliacoes_desempenho_anexos: newAnexos,
+        })
         .eq("id", collaborator.id);
 
       if (error) throw error;
@@ -242,14 +311,39 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
                     )}
                   </div>
                   {addingForId === c.id && (
-                    <div className="animate-fade-in-down mt-3 flex items-center justify-between rounded-lg bg-gray-50 p-3">
+                    <div className="animate-fade-in-down mt-3 flex flex-col gap-2 rounded-lg bg-gray-50 p-3 md:flex-row md:items-center md:justify-between md:gap-0">
                       <input
                         type="date"
                         value={newDate}
                         onChange={(e) => setNewDate(e.target.value)}
-                        className="focus:ring-opacity-50 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+                        className="focus:ring-opacity-50 mb-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 md:mb-0"
                       />
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center">
+                        <label
+                          htmlFor="anexo-upload"
+                          className="mr-2 flex cursor-pointer items-center rounded-md border border-blue-300 bg-blue-100 px-3 py-1 text-sm text-blue-700 transition hover:bg-blue-200"
+                        >
+                          <FaPaperclip className="mr-2" />
+                          {newAnexo ? newAnexo.name : "Adicionar anexo"}
+                          <input
+                            id="anexo-upload"
+                            type="file"
+                            onChange={handleAnexoChange}
+                            className="hidden"
+                          />
+                        </label>
+                        {newAnexoPreview && (
+                          <a
+                            href={newAnexoPreview}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-2 text-xs text-blue-600 underline"
+                          >
+                            Pré-visualizar
+                          </a>
+                        )}
+                      </div>
+                      <div className="mt-2 flex items-center gap-2 md:mt-0">
                         <button
                           onClick={() => handleSaveReview(c)}
                           disabled={loadingId === c.id}
@@ -282,30 +376,57 @@ const AvaliacoesPendentesModal = ({ isOpen, onClose, onUpdate }) => {
                         <ul className="list-inside list-disc space-y-1">
                           {[...c.avaliacoes_desempenho]
                             .sort((a, b) => new Date(b) - new Date(a))
-                            .map((date, index) => (
-                              <li
-                                key={index}
-                                className="flex items-center justify-between text-gray-600"
-                              >
-                                <span>
-                                  {new Date(date).toLocaleDateString("pt-BR", {
-                                    timeZone: "UTC",
-                                  })}
-                                </span>
-                                <button
-                                  onClick={() => handleDeleteReview(c, date)}
-                                  disabled={loadingId === c.id}
-                                  className="text-red-500 hover:text-red-700 disabled:text-gray-400"
+                            .map((date, index) => {
+                              // Encontrar o índice original da data (pois o array foi ordenado)
+                              const originalIndex =
+                                c.avaliacoes_desempenho.findIndex(
+                                  (d) => d === date,
+                                );
+                              const anexoUrl =
+                                c.avaliacoes_desempenho_anexos &&
+                                c.avaliacoes_desempenho_anexos[originalIndex];
+                              return (
+                                <li
+                                  key={index}
+                                  className="flex items-center justify-between text-gray-600"
                                 >
-                                  {loadingId === c.id &&
-                                  deletingIndex === date ? (
-                                    <FaSpinner className="animate-spin" />
-                                  ) : (
-                                    <FaTrash />
-                                  )}
-                                </button>
-                              </li>
-                            ))}
+                                  <span className="flex items-center gap-2">
+                                    {new Date(date).toLocaleDateString(
+                                      "pt-BR",
+                                      {
+                                        timeZone: "UTC",
+                                      },
+                                    )}
+                                    {anexoUrl && (
+                                      <a
+                                        href={anexoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="ml-2 flex items-center gap-1 text-blue-600 hover:underline"
+                                        title="Visualizar anexo"
+                                      >
+                                        <FaEye />{" "}
+                                        <span className="hidden md:inline">
+                                          Anexo
+                                        </span>
+                                      </a>
+                                    )}
+                                  </span>
+                                  <button
+                                    onClick={() => handleDeleteReview(c, date)}
+                                    disabled={loadingId === c.id}
+                                    className="text-red-500 hover:text-red-700 disabled:text-gray-400"
+                                  >
+                                    {loadingId === c.id &&
+                                    deletingIndex === date ? (
+                                      <FaSpinner className="animate-spin" />
+                                    ) : (
+                                      <FaTrash />
+                                    )}
+                                  </button>
+                                </li>
+                              );
+                            })}
                         </ul>
                       ) : (
                         <p className="text-sm text-gray-500">
