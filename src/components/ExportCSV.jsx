@@ -6,7 +6,7 @@ async function exportCSV() {
   const { data, error } = await supabase
     .from("users")
     .select(
-      "id, email, nome, sobrenome, telefone, cargo, departamento, data_nascimento, observacoes, ativo, inicio, cpf, cnpj, endereco, cidade, uf, remuneracao, regime_contratacao, escolaridade, saida, valor_beneficios, valor_total_remuneracao, email_pessoal, beneficios, ultima_avaliacao_desempenho, anos_empresa, ferias_totais, ferias_tiradas, saldo_ferias, data_ferias",
+      "id, email, nome, sobrenome, telefone, cargo, departamento, data_nascimento, observacoes, ativo, inicio, cpf, cnpj, endereco, cidade, uf, remuneracao, regime_contratacao, escolaridade, saida, valor_beneficios, valor_total_remuneracao, email_pessoal, beneficios, avaliacoes_desempenho, anos_empresa, ferias_totais, ferias_tiradas, saldo_ferias, data_ferias",
     );
 
   if (error) {
