@@ -87,7 +87,7 @@ const FeriadosList = () => {
           <p>{error}</p>
         </div>
       ) : (
-        <div className="overflow-y-auto max-h-64">
+        <div className="max-h-64 overflow-y-auto">
           {feriadosParaExibir.length === 0 ? (
             <p className="text-center text-gray-500">
               Nenhum feriado encontrado

@@ -9,6 +9,7 @@ import FeriasAgendadas from "../components/FeriasAgendadas";
 import Engage from "../components/Engage";
 import AvaliacoesPendentes from "../components/AvaliacoesPendentes";
 import AvaliacoesPendentesModal from "../components/AvaliacoesPendentesModal";
+import Eventos from "../components/eventos/Eventos";
 
 export const App = () => {
   const [isAvaliacoesModalOpen, setIsAvaliacoesModalOpen] = useState(false);
@@ -74,6 +75,10 @@ export const App = () => {
             <FeriadosList />
           </section>
           {/* <Engage /> */}
+
+          <section className="mt-8 w-full">
+            <Eventos />
+          </section>
         </div>
       </main>
 
