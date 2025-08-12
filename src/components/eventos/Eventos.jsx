@@ -306,7 +306,7 @@ export default function Eventos() {
         >
           <div className="absolute inset-0" onClick={fecharDetalhes} />
 
-          <div className="relative z-10 w-full max-w-2xl rounded-2xl bg-white shadow-xl">
+          <div className="relative z-10 h-11/12 w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between p-4">
               <h3 className="text-lg font-semibold text-[var(--vertical-color)]">
                 {detalheEvento.titulo_evento}
@@ -449,7 +449,7 @@ export default function Eventos() {
             onClick={() => setShowModal(false)}
           />
 
-          <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-xl">
+          <div className="relative z-10 h-10/12 w-full max-w-xl overflow-y-auto rounded-2xl bg-white shadow-xl">
             <form onSubmit={handleSalvarEvento}>
               <div className="flex items-center justify-between p-4">
                 <h3 className="text-lg font-semibold text-[var(--vertical-color)]">
